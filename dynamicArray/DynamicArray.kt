@@ -75,7 +75,7 @@ class DynamicArray<E> {
         cur.data = data
     }
 
-    fun toBin(dec: Long): Array<Long> {
+    private fun toBin(dec: Long): Array<Long> {
         if(dec < 0) {
             throw IllegalArgumentException("DynamicArray.toBin(dec: Long): negative Longs not allowed")
         }
