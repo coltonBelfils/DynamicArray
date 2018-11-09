@@ -8,14 +8,10 @@ class DynamicArray<E> {
         val one: Node<H> = Node()
     }
 
-    class Node<H>() {
+    class Node<H> {
         var data: H? = null
         lateinit var zero: Node<H>
         lateinit var one: Node<H>
-
-        constructor(data: H?) : this() {
-            this.data = data
-        }
 
         fun makeChildren() {
             if(!this::zero.isInitialized) {
@@ -32,23 +28,11 @@ class DynamicArray<E> {
             throw IllegalArgumentException("DynamicArray.get(index: Long): negative Longs not allowed")
         }
 
-        val binIndex = this.toBin(index)
-        lateinit var cur: Node<E>
-        if(binIndex[0] == 0L) {
-            cur = this.head.zero
-        } else {
-            cur = this.head.one
+        val pos = this.getNode(index)
+        if(pos.data == null) {
+            throw IllegalArgumentException("DynamicArray.get(index: Long): Index: $index does not have a value yet")
         }
-
-        for (i in 1 until binIndex.size - 1) {
-            cur.makeChildren()
-            if(binIndex[i] == 0L) {
-                cur = cur.zero
-            } else {
-                cur = cur.one
-            }
-        }
-        return cur.data
+        return pos.data
     }
 
     fun set(index: Long, data: E) {
@@ -56,23 +40,8 @@ class DynamicArray<E> {
             throw IllegalArgumentException("DynamicArray.set(index: Long, data: E): negative Longs not allowed")
         }
 
-        val binIndex = this.toBin(index)
-        lateinit var cur: Node<E>
-        if(binIndex[0] == 0L) {
-            cur = this.head.zero
-        } else {
-            cur = this.head.one
-        }
-
-        for (i in 1 until binIndex.size - 1) {
-            cur.makeChildren()
-            if(binIndex[i] == 0L) {
-                cur = cur.zero
-            } else {
-                cur = cur.one
-            }
-        }
-        cur.data = data
+        val pos = this.getNode(index)
+        pos.data = data
     }
 
     private fun toBin(dec: Long): Array<Long> {
@@ -101,5 +70,29 @@ class DynamicArray<E> {
         }
 
         return bin
+    }
+
+    private fun getNode(index: Long): Node<E> {
+        val binIndex = this.toBin(index)
+        lateinit var cur: Node<E>
+        if(binIndex[0] == 0L) {
+            cur = this.head.zero
+        } else {
+            cur = this.head.one
+        }
+
+        for (i in 1 until binIndex.size - 1) {
+            cur.makeChildren()
+            if(binIndex[i] == 0L) {
+                cur = cur.zero
+            } else {
+                cur = cur.one
+            }
+        }
+        return cur
+    }
+
+    fun hasData(index: Long): Boolean {
+        return this.getNode(index).data != null
     }
 }
