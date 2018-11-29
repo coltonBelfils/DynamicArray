@@ -19,11 +19,3 @@ fun set(index: Long, data: E)
 ```kotlin
 fun hasData(index: Long): Boolean
 ```
-
-## Notes
-
-- I'm using Longs just because they're bigger, which is probably completely unnecessary and will probably be changed back to Int later
-
-- This may not be ready for use in java code as it does not yet have the @JVM annotations yet
-
-- I wrote this in kotlin because it is like my coding comfort food
