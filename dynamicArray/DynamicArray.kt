@@ -23,32 +23,35 @@ class DynamicArray<E> {
         }
     }
 
-    fun get(index: Long): E? {
+    fun get(index: Int): E? {
         if(index < 0) {
-            throw IllegalArgumentException("DynamicArray.get(index: Long): negative Longs not allowed")
+            throw IllegalArgumentException("DynamicArray.get(index: Int): negative Ints not allowed")
         }
 
         val pos = this.getNode(index)
         if(pos.data == null) {
-            throw IllegalArgumentException("DynamicArray.get(index: Long): Index: $index does not have a value yet")
+            throw IllegalArgumentException("DynamicArray.get(index: Int): Index: $index does not have a value yet")
         }
         return pos.data
     }
 
-    fun set(index: Long, data: E) {
+    fun set(index: Int, data: E) {
         if(index < 0) {
-            throw IllegalArgumentException("DynamicArray.set(index: Long, data: E): negative Longs not allowed")
+            throw IllegalArgumentException("DynamicArray.set(index: Int, data: E): negative Ints not allowed")
+        }
+        if(data == null) {//this check is for use in Java code
+            throw IllegalArgumentException("DynamicArray.set(index: Int, data E): null values not allowed")
         }
 
         val pos = this.getNode(index)
         pos.data = data
     }
 
-    private fun toBin(dec: Long): Array<Long> {
+    private fun toBin(dec: Int): Array<Int> {
         if(dec < 0) {
-            throw IllegalArgumentException("DynamicArray.toBin(dec: Long): negative Longs not allowed")
+            throw IllegalArgumentException("DynamicArray.toBin(dec: Int): negative Ints not allowed")
         }
-        if(dec == 0L) {
+        if(dec == 0) {
             return arrayOf(0)
         }
         var d = dec
@@ -60,11 +63,11 @@ class DynamicArray<E> {
         }
 
         d = dec
-        val bin = Array<Long>(i, {n -> 0})
+        val bin = Array<Int>(i, {n -> 0})
         i = 0
 
         while(d > 0) {
-            bin[i] = d%2L
+            bin[i] = d%2
             d /= 2
             i++
         }
@@ -72,10 +75,10 @@ class DynamicArray<E> {
         return bin
     }
 
-    private fun getNode(index: Long): Node<E> {
+    private fun getNode(index: Int): Node<E> {
         val binIndex = this.toBin(index)
         lateinit var cur: Node<E>
-        if(binIndex[0] == 0L) {
+        if(binIndex[0] == 0) {
             cur = this.head.zero
         } else {
             cur = this.head.one
@@ -83,7 +86,7 @@ class DynamicArray<E> {
 
         for (i in 1 until binIndex.size - 1) {
             cur.makeChildren()
-            if(binIndex[i] == 0L) {
+            if(binIndex[i] == 0) {
                 cur = cur.zero
             } else {
                 cur = cur.one
@@ -92,7 +95,7 @@ class DynamicArray<E> {
         return cur
     }
 
-    fun hasData(index: Long): Boolean {
+    fun hasData(index: Int): Boolean {
         return this.getNode(index).data != null
     }
 }
