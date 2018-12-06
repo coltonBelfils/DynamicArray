@@ -1,4 +1,4 @@
-package dynamicArray
+package com.example.colton.applicationname
 
 class DynamicArray<E> {
     private var head = HeadNode<E>()
@@ -30,7 +30,8 @@ class DynamicArray<E> {
 
         val pos = this.getNode(index)
         if(pos.data == null) {
-            throw IllegalArgumentException("DynamicArray.get(index: Int): Index: $index does not have a value yet")
+            return null
+            //throw IllegalArgumentException("DynamicArray.get(index: Int): Index: $index does not have a value yet")
         }
         return pos.data
     }
@@ -84,7 +85,7 @@ class DynamicArray<E> {
             cur = this.head.one
         }
 
-        for (i in 1 until binIndex.size - 1) {
+        for (i in 0 until binIndex.size) {
             cur.makeChildren()
             if(binIndex[i] == 0) {
                 cur = cur.zero
